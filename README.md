@@ -1,6 +1,9 @@
 nginx-unit
 ==========
 
+![Build Status](https://img.shields.io/travis/danie1k/ansible-role-nginx-unit)
+![MIT License](https://img.shields.io/github/license/danie1k/ansible-role-nginx-unit)
+
 Installs [NGINX Unit](https://unit.nginx.org/) server.
 
 Supported Languages
