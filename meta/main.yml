@@ -11,10 +11,12 @@ galaxy_info:
       versions:
         - 8
   galaxy_tags:
+    - centos
     - development
     - nginx
     - pyenv
     - python
+    - rhel
     - web
     - wsgi
 

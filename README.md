@@ -1,15 +1,16 @@
 nginx-unit
 ==========
 
-![Build Status](https://img.shields.io/travis/danie1k/ansible-role-nginx-unit)
-![MIT License](https://img.shields.io/github/license/danie1k/ansible-role-nginx-unit)
+[![Build Status](https://img.shields.io/travis/danie1k/ansible-role-nginx-unit)][1]
+[![MIT License](https://img.shields.io/github/license/danie1k/ansible-role-nginx-unit)][2]
+[[![Ansible Galaxy](https://img.shields.io/badge/galaxy-nginx__unit-660198.svg)][3]
 
 Installs [NGINX Unit](https://unit.nginx.org/) server.
 
 Supported Languages
 -------------------
 
-* **Python**
+* **Python**  
     Currently role supports only Python installed via [pyenv](https://github.com/pyenv/pyenv) (for example using [avanov.pyenv](https://galaxy.ansible.com/avanov/pyenv) role).
 
     To **automatically** compile modules for **all** installed Python versions, set `pyenv_path` variable value.
@@ -36,10 +37,16 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - { role: username.rolename, x: 42 }
+     - name: danie1k.nginx_unit
+       vars:
+         pyenv_path: /usr/local/pyenv
 ```
 
 License
 -------
 
 MIT
+
+[1]: http://travis-ci.org/danie1k/ansible-role-nginx-unit
+[2]: https://github.com/danie1k/ansible-role-nginx-unit/blob/master/LICENSE
+[3]: https://galaxy.ansible.com/danie1k/nginx_unit
