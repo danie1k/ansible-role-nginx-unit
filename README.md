@@ -6,9 +6,9 @@ Installs [NGINX Unit](https://unit.nginx.org/) server.
 Supported Languages
 -------------------
 
-* **Python**  
+* **Python**
     Currently role supports only Python installed via [pyenv](https://github.com/pyenv/pyenv) (for example using [avanov.pyenv](https://galaxy.ansible.com/avanov/pyenv) role).
-    
+
     To **automatically** compile modules for **all** installed Python versions, set `pyenv_path` variable value.
 
 Role Variables
