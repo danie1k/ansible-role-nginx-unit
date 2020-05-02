@@ -1,0 +1,21 @@
+---
+
+galaxy_info:
+  role_name: nginx_unit
+  author: danie1k
+  description: NGINX Unit for RHEL/CentOS
+  license: license (MIT)
+  min_ansible_version: 2.9
+  platforms:
+    - name: EL
+      versions:
+        - 8
+  galaxy_tags:
+    - development
+    - nginx
+    - pyenv
+    - python
+    - web
+    - wsgi
+
+dependencies: []

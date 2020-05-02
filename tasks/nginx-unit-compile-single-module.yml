@@ -1,0 +1,55 @@
+---
+
+- assert:
+    that:
+      - pyenv_path is defined
+      - nginx_unit_source_workdir is defined
+      - nginx_unit_module_python_interpreter is defined
+
+- set_fact:
+    nginx_unit_module_python_version: "{{ nginx_unit_module_python_interpreter.split('/')|last }}"
+
+- set_fact:
+    nginx_unit_module_name: "python{{ nginx_unit_module_python_version }}"
+    nginx_unit_module_config: "{{ nginx_unit_module_python_interpreter }}/bin/python-config"
+    nginx_unit_module_lib_path: "{{ nginx_unit_module_python_interpreter }}/lib"
+    nginx_unit_compiled_module_path: "{{ local_nginx_unitd_modules_dir }}/python{{ nginx_unit_module_python_version }}.unit.so"
+
+- name: "Check if NGINX Unit module for Python {{ nginx_unit_module_python_version }} already exists"
+  stat: path="{{ nginx_unit_compiled_module_path }}"
+  register: nginx_unit_compiled_module_path_stat
+
+- block:
+    - stat: path="{{ nginx_unit_source_workdir }}/build/Makefile"
+      register: nginx_unit_sources_makefile_stat
+
+    - shell: 'grep "^{{ nginx_unit_module_name }}:" {{ nginx_unit_source_workdir }}/build/Makefile 2>&1 >/dev/null && echo "1" || echo "0"'
+      register: grep_result
+      when: nginx_unit_sources_makefile_stat.stat.exists
+
+    - set_fact:
+        grep_result: "0"
+      when: not nginx_unit_sources_makefile_stat.stat.exists
+
+    - name: "Configure Python {{ nginx_unit_module_python_version }} module"
+      command: >-
+        ./configure python --module=python{{ nginx_unit_module_python_version }}
+        --config={{ nginx_unit_module_config }} --lib-path={{ nginx_unit_module_lib_path }}
+      args:
+        chdir: "/tmp/unit-{{ nginx_unit_version }}"
+      when: not (grep_result is defined) or grep_result.stdout == "0"
+
+    - name: "Compile Python {{ nginx_unit_module_python_version }} module"
+      command: "make python{{ nginx_unit_module_python_version }}"
+      args:
+        chdir: "/tmp/unit-{{ nginx_unit_version }}"
+        creates: "{{ nginx_unit_source_workdir }}/build/python{{ nginx_unit_module_python_version }}.unit.so"
+
+    - name: "Install Python {{ nginx_unit_module_python_version }} NGINX Unit module into system"
+      copy:
+        src: "{{ nginx_unit_source_workdir }}/build/python{{ nginx_unit_module_python_version }}.unit.so"
+        remote_src: true
+        dest:
+      notify: restart unit service
+
+  when: not (nginx_unit_compiled_module_path_stat.stat.exists)

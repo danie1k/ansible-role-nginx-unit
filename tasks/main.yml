@@ -1,0 +1,47 @@
+---
+
+- set_fact:
+    local_nginx_unitd_modules_dir: "{{ nginx_unitd_modules | default('/usr/lib64/unit/modules') }}"
+
+- name: "Check if NGINX Unit repo is already configured"
+  stat: path="{{ nginx_unit_repofile_path }}"
+  register: nginx_unit_repofile_stat
+
+- name: "Add NGINX Unit repo to system"
+  copy:
+    dest: "{{ nginx_unit_repofile_path }}"
+    content: |
+      [nginx-unit]
+      name=nginx unit repo
+      baseurl={{ nginx_unit_repo_url }}
+      gpgcheck=0
+      enabled=1
+    owner: root
+    group: root
+    mode: "u=rw,go=r"
+  when: not nginx_unit_repofile_stat.stat.exists
+
+- name: "Install NGINX Unit base"
+  package:
+    name: unit
+    state: present
+  notify: enable unit service
+
+- name: "Override NGINX Unit service config according to role variables"
+  template:
+    src: override.conf
+    dest: "{{ nginx_unit_service_override_path }}"
+    owner: root
+    group: root
+    mode: "u=rw,go=r"
+  register: service_override_conf
+
+- name: "Reload system services daemon"  # noqa 503
+  systemd:
+    daemon_reload: true
+  notify: enable unit service
+  when: service_override_conf.changed
+
+- name: "Compile & install Pyenv-based Python modules for NGINX Unit"
+  include_tasks: compile-python-from-pyenv.yml
+  when: (pyenv_path is defined) and pyenv_path

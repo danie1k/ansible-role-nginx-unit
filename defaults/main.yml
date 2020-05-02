@@ -1,0 +1,12 @@
+---
+
+pyenv_path: ""
+
+nginx_unitd_daemon: false
+nginx_unitd_control: unix:/run/unit/control.sock
+nginx_unitd_pid: /run/unit/unit.pid
+nginx_unitd_log: /var/log/unit/unit.log
+nginx_unitd_modules: /usr/lib64/unit/modules
+nginx_unitd_state: /var/lib/unit
+nginx_unitd_user: "nobody"
+nginx_unitd_group: ""

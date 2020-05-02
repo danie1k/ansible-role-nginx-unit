@@ -1,0 +1,33 @@
+---
+
+- name: "Get installed NGINX Unit version"  # noqa 301
+  shell: unitd --version 2>&1
+  register: unitd_version_shell
+
+- name: "Get available Python interpreters"  # noqa 301
+  shell: ". {{ pyenv_path }}/.pyenvrc && ls -1 -d $PYENV_ROOT/versions/*"
+  register: pyenv_versions_shell
+
+- set_fact:
+    nginx_unit_version: "{{ unitd_version_shell.stdout_lines.0.split(':')|last|trim }}"
+    nginx_unit_python_interpreters: "{{ pyenv_versions_shell.stdout_lines }}"
+
+- set_fact:
+    nginx_unit_source_workdir: "/tmp/unit-{{ nginx_unit_version }}"
+
+- name: "Download NGINX Unit sources"
+  unarchive:
+    src: "https://unit.nginx.org/download/unit-{{ nginx_unit_version }}.tar.gz"
+    remote_src: true
+    dest: /tmp/
+
+- name: "Configure NGINX Unit sources"
+  command: ./configure
+  args:
+    chdir: "{{ nginx_unit_source_workdir }}"
+    creates: "{{ nginx_unit_source_workdir }}/build/autoconf.data"
+
+- include_tasks: nginx-unit-compile-single-module.yml
+  with_items: "{{ nginx_unit_python_interpreters }}"
+  loop_control:
+    loop_var: nginx_unit_module_python_interpreter

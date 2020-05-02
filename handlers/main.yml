@@ -1,0 +1,7 @@
+---
+
+- name: enable unit service
+  service: name=unit state=started enabled=yes
+
+- name: restart unit service
+  service: name=unit state=restarted
