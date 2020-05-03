@@ -13,7 +13,9 @@ Supported Languages
 * **Python**  
     Currently role supports only Python installed via [pyenv](https://github.com/pyenv/pyenv) (for example using [avanov.pyenv](https://galaxy.ansible.com/avanov/pyenv) role).
 
-    To **automatically** compile modules for **all** installed Python versions, set `pyenv_path` variable value.
+    * To properly build Nginx Unit modules, Python must be compiled with `--enable-shared` flag (https://github.com/pyenv/pyenv/wiki#how-to-build-cpython-with---enable-shared).  
+      _When using [avanov.pyenv](https://galaxy.ansible.com/avanov/pyenv), set the `pyenv_python_configure_opts: "--enable-shared"` var, before running role._
+    * To **automatically** compile modules for **all** installed Python versions, set `pyenv_path` variable value.
 
 Role Variables
 --------------
