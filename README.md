@@ -3,7 +3,7 @@ nginx-unit
 
 [![Build Status](https://img.shields.io/travis/danie1k/ansible-role-nginx-unit)][1]
 [![MIT License](https://img.shields.io/github/license/danie1k/ansible-role-nginx-unit)][2]
-[[![Ansible Galaxy](https://img.shields.io/badge/galaxy-nginx__unit-660198.svg)][3]
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-nginx__unit-660198.svg)][3]
 
 Installs [NGINX Unit](https://unit.nginx.org/) server.
 

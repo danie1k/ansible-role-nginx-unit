@@ -17,6 +17,7 @@ galaxy_info:
     - pyenv
     - python
     - rhel
+    - unit
     - web
     - wsgi
 
